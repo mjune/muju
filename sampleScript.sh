@@ -1,8 +1,4 @@
-#!/bin/bash
-# Purpose : WebLogic AdminServer wrapper script which redirects logs to admin.out
-# Author : Pavan Devarakonda <wlatricksntips .blogspot.com=""> ver 0.2
-# Category  : WebLogic Best Practices
-# Override  : Yes, You can modify LOGDIR, LOGPATH values 
+#!/bin/bash  
  
 clear
 DOMAIN_HOME=${PWD}
@@ -20,5 +16,4 @@ else
  echo "Log path doesn't exists... creating directory now!!"
  mkdir -p $LOGDIR
  ./$0
-fi
-</wlatricksntips>
+fi 
