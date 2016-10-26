@@ -30,13 +30,7 @@ public class HelloServlet extends HttpServlet {
 		System.out.println("Hello Sky Servlet Sky.11.11");
 		PrintWriter pw = response.getWriter();
 		pw.println("do11do11do11do11do11do11do11do11 Hello Sky Servlet Sky.11.11 .............do11do11.");
-		pw.println("do22 Hello Sky Servlet Sky.11.11 ..............");
-		pw.println("do33 Hello Sky Servlet Sky.11.11 .............. Sky Servlet Sky.aa ..............");
-		pw.println("do44 Hello Sky Servlet Sky.11.11 .............. Sky Servlet Sky.aa ..............");
-		pw.println("do55 Hello Sky Servlet Sky.11.11 .............. Sky Servlet Sky.bb ..............");
-		pw.println("do66 Hello Sky Servlet Sky.11.11 .............. Sky Servlet Sky.bb ..............");
-		pw.println("do77 do77do77do77do77do77do77do77do77do77do77do77do77do77Hello Sky Servlet Sky.11.11 .............. Sky Servlet Sky.cc ..............");
-		
+		 
 		
 	}
 
