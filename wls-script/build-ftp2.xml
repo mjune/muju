@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="ftpUpload" default="all" basedir=".">
+    <property file="build2.properties" />
+    <property name="build.dir" value="." />
+    <property name="output.class.dir" value="${build.dir}/build/classes" />
+    <property name="work.web.dir" value="${build.dir}/web" />
+ 
+ 
+    <target name="all">
+        <!--
+        <antcall target="download" />
+        <antcall target="delete" />
+        <antcall target="upload" />
+        -->
+        <antcall target="execute" />
+    </target>
+ 
+ 
+    <!--FTP Upload-->
+    <target name="upload">
+        <ftp server="${FTP.SERVER}" port="${FTP.PORT}" remotedir="${FTP.PATH}" userid="${FTP.USERID}" password="${FTP.PASSWD}" 
+             newer="true" timediffauto="true" passive="yes" binary="yes" depends="yes" verbose="yes" 
+             separator="/" serverLanguageCodeConfig="en" serverTimeZoneConfig="KORST-9">
+            <fileset dir="${output.class.dir}">
+                <include name="**/*.class" />
+            </fileset>
+        </ftp>
+    </target>
+ 
+    <!--FTP Download-->
+    <target name="download">
+        <ftp server="${FTP.SERVER}" port="${FTP.PORT}" remotedir="${FTP.PATH}" userid="${FTP.USERID}" password="${FTP.PASSWD}" newer="true" timediffauto="true" passive="yes" binary="yes" depends="yes" verbose="yes" separator="/" serverLanguageCodeConfig="en" serverTimeZoneConfig="KORST-9">
+            <fileset dir="${BACKUP.PATH}">
+                <include name="**/*.class" />
+            </fileset>
+        </ftp>
+    </target>
+ 
+    <!--FTP List-->
+    <target name="list">
+        <ftp server="${FTP.SERVER}" port="${FTP.PORT}" remotedir="${FTP.PATH}" userid="${FTP.USERID}" password="${FTP.PASSWD}" timediffauto="true" action="list" listing="D:/ant/ftp.list" passive="yes" binary="yes" depends="yes" verbose="yes" separator="/" serverLanguageCodeConfig="en" serverTimeZoneConfig="KORST-9">
+            <fileset dir="${BACKUP.PATH}">
+                <include name="**/*.class" />
+            </fileset>
+        </ftp>
+    </target>
+ 
+    <!--FTP Delete-->
+    <target name="delete">
+        <echo message="서버의 파일을 삭제 합니다." />
+        <ftp server="${FTP.SERVER}" port="${FTP.PORT}" remotedir="${FTP.PATH}" userid="${FTP.USERID}" password="${FTP.PASSWD}" action="del" passive="yes" binary="yes" depends="yes" verbose="yes" separator="/" serverTimeZoneConfig="KORST-9">
+            <fileset>
+                <include name="**/*.class" />
+            </fileset>
+        </ftp>
+    </target>
+ 
+ 
+ 
+     
+    <!-- JAVA FTP -->
+    <target name="execute" >
+        <java classname="org.app.HomeController" classpath="WebContent/WEB-INF/lib/commons-net-3.2.jar;build/classes;">
+            <arg file="." />
+            <arg value="build.properties" />
+        </java>
+    </target>
+     
+ 
+</project>
