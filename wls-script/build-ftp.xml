@@ -1,0 +1,70 @@
+<project name="WebApp" default="upload">
+<property environment="env"/>
+<property name="base.dir"    value="."/> 
+<property name="src.dir"     value="src"/>
+<property name="target.dir"  value="./target"/>
+<property name="project.dir" value="./target/hello-0.0.1-SNAPSHOT"/>
+<property name="build.dir"   value="./target/hello-0.0.1-SNAPSHOT/WEB-INF/classes"/> 
+<property name="lib.dir"     value="./target/hello-0.0.1-SNAPSHOT/WEB-INF/lib"/> 
+<property name="war.file"    value="hello-0.0.1-SNAPSHOT.war"/>
+<target name="clean">
+    <delete dir="${target.dir}"/>
+    <delete dir="${war.file}"/> 
+</target>
+        
+<target name="compile" depends="clean">
+    <mkdir dir="${build.dir}"/>
+    <javac deprecation="off" srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false" >
+      <classpath>
+                <pathelement location="${lib.dir}"/>
+                <fileset dir="${lib.dir}" includes="*.jar"/>
+        </classpath>
+        <classpath>
+                <pathelement location="${env.CATALINA_HOME}/common/lib"/>
+                <fileset dir="${env.CATALINA_HOME}/common/lib" includes="*.jar"/>
+        </classpath>  
+    </javac>
+    <copy todir="${build.dir}/properties">
+        <fileset dir="${src.dir}/properties"/>
+    </copy> 
+</target>
+        
+<target name="mkwar" depends="compile">
+    <mkdir dir="${dist.dir}"/>
+    <war destfile="${dist.dir}/${war.file}" webxml="WEB-INF/web.xml">
+        <!--
+        <classes dir="${build.dir}" />
+        <lib dir="${lib.dir}" />
+        -->
+        <fileset dir=".">
+            <exclude name=".*"/>
+            <exclude name="build.xml"/>
+            <exclude name="work/*"/>
+            <exclude name="work/**/*"/>
+            <exclude name="WEB-INF/web.xml"/>
+        </fileset>
+    </war>
+</target> 
+
+<target name="upload"  >
+    <property name="ftp.server" value="w-market.co.kr"/>
+    <property name="ftp.port" value="21"/>
+    <property name="ftp.userid" value="user"/>
+    <property name="ftp.passwd" value="passwd"/>
+    <property name="ftp.remotedir" value="/www/test"/>
+    <echo>connecting to ${ftp.server} into ${ftp.remotedir}</echo>
+    <ftp server="${ftp.server}" port="${ftp.port}"
+            userid="${ftp.userid}" password="${ftp.passwd}"
+            remotedir="${ftp.remotedir}" depends="true"
+            verbose="true" passive="true" binary="true"
+            ignoreNoncriticalErrors="false"> 
+        <fileset dir="${build.dir}">
+            <include name="**/*.class"/>  
+        </fileset>
+         <fileset dir="${dist.dir}">
+            <include name="**/*.xml"/>  
+        </fileset>
+    </ftp>
+</target>
+
+</project> 
