@@ -1,0 +1,78 @@
+<project name="web-test" default="deploy">
+	<property name="wls.username" value="weblogic" />
+	<property name="wls.password" value="weblogic" />
+	<property name="wls.hostname" value="localhost" />
+	<property name="wls.port"     value="7001" />
+	<property name="admin.server.name" value="AdminServer" />
+	<property name="deploy.target"     value="ManagedServer_1" />
+	
+		
+	 <property name="deploy.name" value="helloweb" />
+	
+	<!-- <property name="deploy.source" value="helloweb.war" /> -->
+	
+	
+	<!-- target sources directory -->
+	<property name="deploy.source" value="/user_domain/my_projects/helloweb" />
+		
+	 
+	<!-- Setting TaskDefinition-->
+	<taskdef name="wldeploy" classname="weblogic.ant.taskdefs.management.WLDeploy">
+		<classpath>
+			<pathelement location="/lib/weblogic.jar" />
+		</classpath>
+	</taskdef> 
+	
+	<!-- 
+	<path id="wl.deploy.path">
+        <fileset file="/Applications/common_lib/weblogic.jar" />
+		    <fileset file="/Applications/common_lib/weblogic-classes.jar" />
+		    <fileset file="/Applications/common_lib/wldeploy.jar" />
+        <fileset file="/Applications/common_lib/bea_wls_remote_deployer.jar" />
+    </path>
+	<taskdef name="wldeploy" classname="weblogic.ant.taskdefs.management.WLDeploy">
+	    <classpath refid="wl.deploy.path" />
+	</taskdef>
+	 -->
+	  
+	<target name="props">
+		<property name="dev.class.source" value="./target/hello-1.0.0/WEB-INF" />
+		<property name="dev.web.source"   value="./src/main/webapp" />  
+	</target>
+	
+	<!-- copyConfig -->
+	<target name="copy" depends="props">
+		<copy file="${dev.class.source}/web.xml" todir="${deploy.source}/WEB-INF/" />
+		
+		<copy todir="${deploy.source}/WEB-INF/classes/">
+			<fileset dir="${dev.class.source}/classes" />
+		</copy>
+		<echo message="${dev.web.source}" />
+		<copy todir="${deploy.source}/login">
+			 <fileset dir="${dev.web.source}/login/"> 
+			      	  	<include name="*.jsp"/>
+			  </fileset>
+		</copy>
+	</target>
+
+	  
+	<target name="deploy">
+		<wldeploy action="deploy" name="${deploy.name}" source="${deploy.source}" 
+			       user="${wls.username}" password="${wls.password}" nostage="true"  verbose="true" 
+			       adminurl="t3://${wls.hostname}:${wls.port}" targets="${deploy.target}" />
+	</target>
+
+	 
+	<target name="redeploy">
+		<wldeploy action="redeploy" name="${deploy.name}" user="${wls.username}" password="${wls.password}" 
+			       verbose="true" adminurl="t3://${wls.hostname}:${wls.port}" targets="${deploy.target}" />
+	</target>
+
+	 
+	<target name="undeploy">
+		<wldeploy action="undeploy" name="${deploy.name}" failonerror="false" 
+			       user="${wls.username}" password="${wls.password}" verbose="true" 
+			       adminurl="t3://${wls.hostname}:${wls.port}" targets="${deploy.target}" />
+	</target>
+	
+</project>
